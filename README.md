@@ -23,4 +23,11 @@ src 						Source codes of the SPI-IQRF lib
 		sysfs_gpio 			Source codes for necessary GPIO settings
 ```
 
+Quick command line compilation on the target
+```
+git clone https://github.com/iqrfsdk/clibspi-linux.git
+cd clibspi-linux
+mkdir -p .build; cd .build; cmake ..; make -j4
+```
+
 See [wiki](https://github.com/MICRORISC/iqrfsdk/wiki) for more information.
