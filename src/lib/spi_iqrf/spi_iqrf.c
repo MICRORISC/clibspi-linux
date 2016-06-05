@@ -126,6 +126,8 @@ static void initNullTransferLowSpeed(void)
 	nullTransfer.speed_hz = SPI_MAX_SPEED;
 	nullTransfer.bits_per_word = BITS_PER_WORD;
 	nullTransfer.cs_change = CS_DESELECT_DEVICE;
+        nullTransfer.rx_nbits = 0;
+        nullTransfer.tx_nbits = 0;
 }
 
 /**
@@ -140,6 +142,8 @@ static void initNullTransferHighSpeed(void)
 	nullTransfer.speed_hz = SPI_MAX_SPEED;
 	nullTransfer.bits_per_word = BITS_PER_WORD;
 	nullTransfer.cs_change = CS_DESELECT_DEVICE;
+        nullTransfer.rx_nbits = 0;
+        nullTransfer.tx_nbits = 0;
 }
 
 /**
@@ -293,7 +297,9 @@ static int sendAndReceiveLowSpeed(void *dataToSend, void *recvBuffer, unsigned i
 		.delay_usecs = DELAY_AFTER_CS_LS_US,
 		.speed_hz = SPI_MAX_SPEED,
 		.bits_per_word = BITS_PER_WORD,
-		.cs_change = CS_DESELECT_DEVICE
+		.cs_change = CS_DESELECT_DEVICE,
+                .tx_nbits = 0,
+                .rx_nbits = 0
 	};
 
 	completeTransfer[0] = nullTransfer;
@@ -356,7 +362,9 @@ static int sendAndReceiveHighSpeed(void *dataToSend, void *recvBuffer, unsigned 
 		.delay_usecs = DELAY_AFTER_BYTE_HS_US,
 		.speed_hz = SPI_MAX_SPEED,
 		.bits_per_word = BITS_PER_WORD,
-		.cs_change = CS_DESELECT_DEVICE
+		.cs_change = CS_DESELECT_DEVICE,
+                .tx_nbits = 0,
+                .rx_nbits = 0
 	};
 
 	completeTransfer[0] = nullTransfer;
