@@ -5,10 +5,12 @@
 #include <time.h>
 #include <linux/types.h>
 #include <spi_iqrf.h>
+#include <sysfs_gpio.h>
 
 #include "DPA.h"
+#include "machines_def.h"
 
-//#define ENABLE_HIGH_SPEED_MODE
+#define ENABLE_HIGH_SPEED_MODE
 
 /** Defines whole DPA message. */
 typedef union
@@ -105,17 +107,23 @@ int main(void)
 
     for (i = 0; i < 10; ++i)
     {
+/*
         pulseLed(BROADCAST_ADDRESS, Green);
         nanosleep(&delayTime, 0);
         pulseLed(BROADCAST_ADDRESS, Red);
         nanosleep(&delayTime, 0);
+*/
 
-        pulseLed(0x01, Green);
+        pulseLed(0x00, Green);
         nanosleep(&delayTime, 0);
+        pulseLed(0x00, Red);
+        nanosleep(&delayTime, 0);
+/*
         pulseLed(0x02, Green);
         nanosleep(&delayTime, 0);
         pulseLed(0x03, Green);
         nanosleep(&delayTime, 0);
+*/
     }
 
     closeCommunication();
@@ -147,6 +155,23 @@ void printErrorAndExit(const char *userMessage, int error, int retValue)
 int openCommunication(void)
 {
     int operResult;
+
+	//enable CE0 for TR communication
+	operResult = gpio_setup(RPIIO_PIN_CE0, GPIO_DIRECTION_OUT, 0);
+	if (operResult < 0)
+	{
+		printf("Initialization failed: %d \n", operResult);
+		return -1;
+	}
+	
+	// enable PWR for TR communication
+	operResult = gpio_setup(RESET_GPIO, GPIO_DIRECTION_OUT, 1);
+	if (operResult < 0)
+	{
+		printf("Initialization failed: %d \n", operResult);
+		gpio_cleanup(RESET_GPIO);
+		return -1;
+	}
 
     operResult = spi_iqrf_init("/dev/spidev0.0");
     if (operResult < 0)
@@ -184,6 +209,10 @@ int closeCommunication(void)
     }
 
     spi_iqrf_destroy();
+
+	// destroy used rpi_io library
+	gpio_cleanup(RESET_GPIO);
+	gpio_cleanup(RPIIO_PIN_CE0);
     return 0;
 }
 

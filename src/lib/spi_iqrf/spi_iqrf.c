@@ -26,8 +26,8 @@
 #include <linux/spi/spidev.h>
 
 #include <spi_iqrf.h>
-#include <sysfs_gpio.h>
-#include <machines_def.h>
+//#include <sysfs_gpio.h>
+//#include <machines_def.h>
 
  /************************************/
  /* Private constants                */
@@ -592,19 +592,19 @@ int spi_iqrf_init(const char *dev)
 		return BASE_TYPES_OPER_ERROR;
 	}
 
-	//enable CE0 for TR communication
-	initResult = gpio_setup(RPIIO_PIN_CE0, GPIO_DIRECTION_OUT, 0);
-	if (initResult < 0)
-	{
-		return BASE_TYPES_OPER_ERROR;
-	}
-
-	// enable PWR for TR communication
-	initResult = gpio_setup(RESET_GPIO, GPIO_DIRECTION_OUT, 1);
-	if (initResult < 0)
-	{
-		return BASE_TYPES_OPER_ERROR;
-	}
+//	//enable CE0 for TR communication
+//	initResult = gpio_setup(RPIIO_PIN_CE0, GPIO_DIRECTION_OUT, 0);
+//	if (initResult < 0)
+//	{
+//		return BASE_TYPES_OPER_ERROR;
+//	}
+//
+//	// enable PWR for TR communication
+//	initResult = gpio_setup(RESET_GPIO, GPIO_DIRECTION_OUT, 1);
+//	if (initResult < 0)
+//	{
+//		return BASE_TYPES_OPER_ERROR;
+//	}
 
 	spi_iqrf_setCommunicationMode(SPI_IQRF_LOW_SPEED_MODE);
 
@@ -935,8 +935,8 @@ int spi_iqrf_destroy(void)
 	libIsInitialized = 0;
 
 	// destroy used rpi_io library
-	gpio_cleanup(RESET_GPIO);
-	gpio_cleanup(RPIIO_PIN_CE0);
+//	gpio_cleanup(RESET_GPIO);
+//	gpio_cleanup(RPIIO_PIN_CE0);
 
 	if (fd == NO_FILE_DESCRIPTOR)
 	{
